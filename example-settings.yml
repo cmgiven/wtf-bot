@@ -1,0 +1,11 @@
+dictionaries:
+  - name: ExampleDictionary
+    repo: user/repo
+    access_token: 0123456789abcdefghijklmnopqrstuv
+    webhook_secret: 0123456789abcdefghijklmnopqrstuv
+slacks:
+  - slack: example
+    secret: 0123456789abcdefghijklmnopqrstuv/yQ3drOQZiVq8B4oBTB6m
+api_keys:
+  - name: Example User
+    token: 0123456789abcdefghijklmnopqrstuv
