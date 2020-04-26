@@ -13,6 +13,8 @@ $redis = Redis.new(
 )
 
 class WtfBot < Sinatra::Application
+  DUMMY_SECRET = ('0' * 32).freeze
+
   @@settings = YAML.load(File.open('settings.yml'))
   @@dictionaries = @@settings['dictionaries'].map do |config|
     Dictionary.new(
@@ -33,9 +35,8 @@ class WtfBot < Sinatra::Application
     end
 
     get '/lookup/:acronym/?' do
-      acronym = params['acronym']
-      entries = @dictionary.lookup(acronym)
-      entries.map { |d| d[Dictionary::DEFINITION] }
+      entries = @dictionary.lookup(params['acronym'])
+      entries.map { |d| d[Dictionary::DEFINITION] }.join("\n")
     end
 
     namespace '/define' do
@@ -62,6 +63,21 @@ class WtfBot < Sinatra::Application
         pr.html_url
       end
     end
+
+    namespace '/github' do
+      before do
+        request.body.rewind
+        @body = request.body.read
+        signature = request.env['HTTP_X_HUB_SIGNATURE']
+
+        error 401 unless github_signature_is_valid?(signature, @body, @dictionary.webhook_secret)
+      end
+
+      post '/webhook/?' do
+        event = JSON.parse(@body)
+        @dictionary.refresh! if event['ref'] == 'refs/heads/master'
+      end
+    end
   end
 
   def api_user_from_token(auth_header)
@@ -75,6 +91,13 @@ class WtfBot < Sinatra::Application
     end
 
     return api_key['name'] if api_key
+  end
+
+  def github_signature_is_valid?(signature, body, secret = DUMMY_SECRET)
+    digest = OpenSSL::Digest.new('sha1')
+    sha = OpenSSL::HMAC.hexdigest(digest, secret, body)
+
+    Rack::Utils.secure_compare(signature, 'sha1=' + sha)
   end
 
   configure :development do
