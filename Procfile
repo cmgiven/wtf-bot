@@ -1,1 +1,1 @@
-web: bundle exec rackup config.ru -p $PORT
+web: RUBYOPT=-W:no-deprecated bundle exec rackup config.ru -p $PORT
