@@ -6,4 +6,4 @@ require 'bundler'
 Bundler.require
 
 require './app'
-run WtfBot
+run WtfBot.app

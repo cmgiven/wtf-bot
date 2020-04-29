@@ -1,7 +1,14 @@
+require 'redis'
 require 'octokit'
 require 'base64'
-require 'csv'
 require 'json'
+require 'csv'
+
+$redis = Redis.new(
+  :reconnect_attempts => 3,
+  :reconnect_delay => 1.0,
+  :reconnect_delay_max => 2.0,
+)
 
 class DictionaryNotLoadedError < StandardError; end
 class CouldNotObtainLock < StandardError; end
