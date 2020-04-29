@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/contrib'
 require 'sinatra/reloader'
+require 'json'
 require 'yaml'
 
 require_relative 'dictionary'
@@ -9,7 +10,11 @@ class Base < Sinatra::Base
   register Sinatra::Namespace
 
   configure do
-    config = YAML.load(File.open('settings.yml'))
+    if ENV['WTF_BOT_SETTINGS']
+      config = JSON.parse(ENV['WTF_BOT_SETTINGS'])
+    else
+      config = YAML.load(File.open('settings.yml'))
+    end
 
     dictionaries = config['dictionaries'].map do |d|
       Dictionary.new(
