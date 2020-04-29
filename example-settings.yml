@@ -1,5 +1,5 @@
 dictionaries:
-  - name: ExampleDictionary
+  - name: Example Organization
     repo: user/repo
     webhook_secret: 0123456789abcdefghijklmnopqrstuv
     access_token: 0123456789abcdefghijklmnopqrstuv
