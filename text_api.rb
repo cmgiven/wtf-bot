@@ -1,25 +1,18 @@
 require_relative 'base'
 
 class TextApi < Base
-  namespace '/lookup' do
-    get '/:dictionary/:acronym/?' do
+  namespace '/:dictionary/:acronym/?' do
+    get do
       entries = dictionary.lookup(acronym)
-      error 404 if entries.empty?
+
       format_results(entries)
     end
 
-    error 404 do
-      "ERROR: No definition found"
-    end
-  end
-
-  namespace '/define' do
-    before do
+    post do
       require_api_key
-    end
 
-    post '/:dictionary/?' do
       pull_request = dictionary.define(acronym, definition, user)
+
       pull_request.html_url
     end
   end
