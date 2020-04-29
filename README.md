@@ -16,11 +16,11 @@ Features:
 ### macOS
 
 1. Install rbenv and Redis: `brew install rbenv redis`
-2. Build Ruby `rbenv install`
-3. Install gems `bundle install`
-4. Start development server `foreman start`
-5. (optional) Install ngrok `brew cask install ngrok`
-6. (optional) Expose development server to a public url `ngrok http 5000`
+2. Build Ruby: `rbenv install`
+3. Install gems: `bundle install`
+4. Start development server: `foreman start`
+5. (optional) Install ngrok: `brew cask install ngrok`
+6. (optional) Expose development server to a public url: `ngrok http 5000`
 
 ## Deploy
 
