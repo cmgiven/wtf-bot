@@ -105,7 +105,7 @@ class Dictionary
   end
 
   def retrieve_from_github_if_needed
-    return if file_sha
+    return false if file_sha
 
     with_lock do
       retrieve_from_github
@@ -142,15 +142,18 @@ class Dictionary
   end
 
   def with_lock(retries: 0)
-    @lock_tries = 0
-    lock = obtain_lock
-    result = yield
-    release_lock if lock
-    result
-  rescue CouldNotObtainLock
-    raise if (@lock_tries += 1) > retries
-    sleep [RETRY_DELAY * 2**(lock_tries - 1), RETRY_DELAY_MAX].min
-    retry
+    lock_tries = 0
+
+    begin
+      lock = obtain_lock
+      result = yield
+      release_lock if lock
+      result
+    rescue CouldNotObtainLock
+      raise if (lock_tries += 1) > retries
+      sleep [RETRY_DELAY * 2**(lock_tries - 1), RETRY_DELAY_MAX].min
+      retry
+    end
   end
 
   def obtain_lock
