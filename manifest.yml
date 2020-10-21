@@ -1,0 +1,7 @@
+---
+applications:
+- name: usds-wtfbot
+  buildpacks:
+  - https://github.com/cloudfoundry/ruby-buildpack.git
+  services:
+  - usds-wtfbot-redis

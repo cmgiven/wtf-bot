@@ -1,0 +1,5 @@
+---
+create-services:
+- name: usds-wtfbot-redis
+  broker: redis32
+  plan: standard-ha

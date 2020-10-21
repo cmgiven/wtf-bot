@@ -5,6 +5,7 @@ require 'json'
 require 'csv'
 
 $redis = Redis.new(
+  :url => ENV['DATABASE_URL'],
   :reconnect_attempts => 3,
   :reconnect_delay => 1.0,
   :reconnect_delay_max => 2.0,
