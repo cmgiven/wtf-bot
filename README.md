@@ -9,7 +9,7 @@ Features:
 * Search across multiple acronym dictionaries at once
 * Support multiple Slacks from a single instance
 * Text API for command line use
-* Deploy to Cloud.gov (coming soon)
+* Deploy to [Cloud.gov](https://cloud.gov)
 
 ## Develop
 
@@ -21,10 +21,6 @@ Features:
 4. Start development server: `foreman start`
 5. (optional) Install ngrok: `brew cask install ngrok`
 6. (optional) Expose development server to a public url: `ngrok http 5000`
-
-## Deploy
-
-(coming soon)
 
 ## Configure
 
@@ -75,6 +71,15 @@ Finally, we'll install the app. Select Install App to Workspace on the Install A
 There are no restrictions on GET requests to the wtf-bot API, but if we want to submit a new definition, we'll need an API key.
 
 We'll add new API keys to the `api_keys` list in `settings.yml`. `name` can be anything; it will be used to indicate the author of new definitions. `token` should be a random string (we can make a new one with `ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'`).
+
+## Deploy
+
+1. Customize `manifest.yml` and `services-manifest.yml`, if desired.
+2. [Set up the Cloud Foundry CLI and log in to Cloud.gov](https://cloud.gov/docs/getting-started/setup/#set-up-the-command-line)
+3. Install the Create-Service-Push plugin: `cf install-plugin Create-Service-Push`
+4. Push the app to Cloud.gov: `cf csp`
+
+There is an issue that prevents the `DATABASE_URL` environment variable from being automatically derived from the `VCAP_SERVICES` variable. Manually set `DATABASE_URL` to point to the redis service (`cf set-env [app name] DATABASE_URL [redis_uri]`) and restart the app (`cf rs [app name]`).
 
 ## API
 
