@@ -1,6 +1,10 @@
 dictionaries:
-  - name: Example Organization
+  - name: Example Organization Dictionary
     repo: user/repo
+    webhook_secret: 0123456789abcdefghijklmnopqrstuv
+    access_token: 0123456789abcdefghijklmnopqrstuv
+  - name: Example Team Dictionary
+    repo: user/repo2
     webhook_secret: 0123456789abcdefghijklmnopqrstuv
     access_token: 0123456789abcdefghijklmnopqrstuv
 slacks:
@@ -8,6 +12,9 @@ slacks:
     dictionary: 0
     secret: 0123456789abcdefghijklmnopqrstuv
     access_token: 0123456789abcdefghijklmnopqrstuv
+    channels:
+      - pattern: teamname-*
+        dictionary: 1
 api_keys:
   - name: Example User
     token: 0123456789abcdefghijklmnopqrstuv

@@ -32,11 +32,12 @@ class Dictionary
 
   attr_reader :name, :repo, :webhook_secret
 
-  def initialize(name, repo, access_token, webhook_secret)
+  def initialize(name, repo, access_token, webhook_secret, default_branch)
     @name = name
     @repo = repo
     @access_token = access_token
     @webhook_secret = webhook_secret
+    @default_branch = default_branch || 'main'
 
     retrieve_from_github_if_needed
   end
@@ -128,7 +129,7 @@ class Dictionary
       $redis.lpush(acronym_cache_key(key), value)
     end
 
-    $redis.set(head_sha_cache_key, github.ref(@repo, 'heads/master').object.sha)
+    $redis.set(head_sha_cache_key, github.ref(@repo, "heads/#{@default_branch}").object.sha)
     $redis.set(file_sha_cache_key, file.sha)
   end
 
@@ -139,7 +140,7 @@ class Dictionary
 
     github.create_ref(@repo, "refs/heads/#{branch}", head_sha)
     github.update_contents(@repo, PATH, message, file_sha, content, :branch => branch)
-    github.create_pull_request(@repo, 'master', branch, message, definition)
+    github.create_pull_request(@repo, @default_branch, branch, message, definition)
   end
 
   def with_lock(retries: 0)

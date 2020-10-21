@@ -22,6 +22,7 @@ class Base < Sinatra::Base
         d['repo'],
         d['access_token'],
         d['webhook_secret'],
+        d['default_branch'],
       )
     end
 

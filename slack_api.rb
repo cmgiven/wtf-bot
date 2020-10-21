@@ -48,8 +48,12 @@ class SlackApi < Base
     @slack ||= fetch_slack
   end
 
+  def channel_name
+    params[:channel_name] || JSON.parse(params[:payload])['channel']['name']
+  end
+
   def dictionary
-    settings.dictionaries[slack['dictionary']]
+    @dictionary ||= fetch_dictionary
   end
 
   def other_dictionaries
@@ -120,6 +124,17 @@ class SlackApi < Base
       Rack::Utils.secure_compare(slack_name.upcase, slack['name'].upcase)
     end
     slacks[0]
+  end
+
+  def fetch_dictionary
+    if slack['channels']
+      slack['channels'].each do |channel|
+        pattern = Regexp.new(channel['pattern'])
+        return settings.dictionaries[channel['dictionary']] if pattern.match?(channel_name)
+      end
+    end
+
+    settings.dictionaries[slack['dictionary']]
   end
 
   def definition_message(acronym, expanded = false)
