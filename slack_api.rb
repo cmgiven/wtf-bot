@@ -17,7 +17,6 @@ class SlackApi < Base
   end
 
   post '/actions/?' do
-    payload = JSON.parse(params[:payload])
     type = payload['type']
 
     Thread.new do
@@ -27,16 +26,16 @@ class SlackApi < Base
 
         case action
         when 'expand'
-          expand_action(payload)
+          expand_action
         when 'define'
-          define_action(payload)
+          define_action
         end
       when 'view_submission'
         callback_id = payload['view']['callback_id']
 
         case callback_id
         when 'definition_modal'
-          definition_modal_submission(payload)
+          definition_modal_submission
         end
       end
     end
@@ -44,12 +43,20 @@ class SlackApi < Base
     status 200
   end
 
+  def payload
+    @payload ||= fetch_payload
+  end
+
+  def private_metadata
+    @private_metadata ||= fetch_private_metadata
+  end
+
   def slack
     @slack ||= fetch_slack
   end
 
   def channel_name
-    params[:channel_name] || JSON.parse(params[:payload])['channel']['name']
+    @channel_name ||= fetch_channel_name
   end
 
   def dictionary
@@ -68,7 +75,7 @@ class SlackApi < Base
     slack['access_token']
   end
 
-  def expand_action(payload)
+  def expand_action
     response_url = payload['response_url']
     acronym = payload['actions'][0]['value'][7..-1]
 
@@ -78,7 +85,7 @@ class SlackApi < Base
     post_json(message.to_json, response_url)
   end
 
-  def define_action(payload)
+  def define_action
     trigger_id = payload['trigger_id']
     acronym = payload['actions'][0]['value'][7..-1].upcase
 
@@ -87,7 +94,7 @@ class SlackApi < Base
     post_json(modal.to_json, 'https://slack.com/api/views.open')
   end
 
-  def definition_modal_submission(payload)
+  def definition_modal_submission
     trigger_id = payload['trigger_id']
     author = payload['user']['name']
     state = payload['view']['state']['values'].values.inject(:merge)
@@ -118,18 +125,38 @@ class SlackApi < Base
     Rack::Utils.secure_compare(signature, 'v0=' + sha)
   end
 
+  def fetch_payload
+    params[:payload] && JSON.parse(params[:payload])
+  end
+
+  def fetch_private_metadata
+    if payload && payload['view'] && payload['view']['private_metadata']
+      JSON.parse(payload['view']['private_metadata'])
+    end
+  end
+
   def fetch_slack
-    slack_name = params[:team_domain] || JSON.parse(params[:payload])['team']['domain']
+    slack_name = params[:team_domain] || payload['team']['domain']
     slacks = settings.slacks.select do |slack|
       Rack::Utils.secure_compare(slack_name.upcase, slack['name'].upcase)
     end
     slacks[0]
   end
 
+  def fetch_channel_name
+    if params[:channel_name]
+      params[:channel_name]
+    elsif payload && payload['channel']
+      payload['channel']['name']
+    elsif private_metadata
+      private_metadata['channel_name']
+    end
+  end
+
   def fetch_dictionary
     if slack['channels']
       slack['channels'].each do |channel|
-        pattern = Regexp.new(channel['pattern'])
+        pattern = Regexp.new("^#{channel['pattern']}$")
         return settings.dictionaries[channel['dictionary']] if pattern.match?(channel_name)
       end
     end
@@ -239,6 +266,7 @@ class SlackApi < Base
       view: {
         type: 'modal',
         callback_id: 'definition_modal',
+        private_metadata: {channel_name: channel_name}.to_json,
         title: { type: 'plain_text', text: 'New Definition' },
         submit: { type: 'plain_text', text: 'Submit' },
         close: { type: 'plain_text', text: 'Cancel' },
