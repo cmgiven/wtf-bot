@@ -24,7 +24,7 @@ Features:
 
 ## Deploy
 
-1. Customize `manifest.yml` and `services-manifest.yml`, if desired
+1. Configure the application prefix by copying `example-vars.yml` to `vars.yml` and editing
 2. [Set up the Cloud Foundry CLI and log in to Cloud.gov](https://cloud.gov/docs/getting-started/setup/#set-up-the-command-line)
 3. Install the Create-Service-Push plugin: `cf install-plugin Create-Service-Push`
 4. Push the app to Cloud.gov: `cf csp`
