@@ -4,7 +4,8 @@ A Slackbot for looking up acronyms by typing `/wtf`.
 
 ![wtfbot replies with the definition of "FITARA": Federal Information Technology Acquisition Reform Act](screenshot.png)
 
-Features:
+### Features:
+
 * Store acronyms in GitHub as a CSV
 * Dictionary cached for speed
 * Open pull requests with new definitions from within Slack
@@ -67,7 +68,9 @@ Finally, we'll need to add the bot user as a collaborator with "Write" access to
 
 We'll create a new Slack app to connect to wtf-bot. Open [Your Apps](https://api.slack.com/apps), and ensure that you are signed in to the workspace to which you want to add wtf-bot. Click "Create New App." Name the app "wtf-bot" and select your workspace from the dropdown menu.
 
-In `settings.yml`, we'll add a new `slacks` item, and set its `name` to the name of our workspace. `dictionary` is the index of the dictionary we want to use as the default for this workspace, so if we want to use the first dictionary in `dictionaries`, we'd set `dictionary` to 0. From the Basic Information page of our Slack app, we'll show and save the Signing Secret as `secret` in `settings.yml`.
+In `settings.yml`, we'll add a new `slacks` item, and set its `name` to the name of our workspace. `dictionary` is the index of the dictionary we want to use as the default for this workspace, so if we want to use the first dictionary in `dictionaries`, we'd set `dictionary` to 0. We can also optionally specify per-channel dictionaries as shown in `example-settings.yml` using `channels`, including using regular expressions to match multiple channels.
+
+From the Basic Information page of our Slack app, we'll show and save the Signing Secret as `secret` in `settings.yml`.
 
 In the Display Information section of the Basic Information page, we'll add an App Icon. We can use `slack-icon.png` for this purpose.
 
