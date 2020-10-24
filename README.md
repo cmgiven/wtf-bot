@@ -2,6 +2,8 @@
 
 A Slackbot for looking up acronyms by typing `/wtf`.
 
+![wtfbot replies with the definition of "FITARA": Federal Information Technology Acquisition Reform Act](screenshot.png)
+
 Features:
 * Store acronyms in GitHub as a CSV
 * Dictionary cached for speed
