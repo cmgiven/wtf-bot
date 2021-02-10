@@ -188,7 +188,7 @@ class Dictionary
   end
 
   def cache_key_prefix
-    "wtf:dictionary:#{compare_string(name)}"
+    "wtf:dictionary:#{compare_string(@name)}"
   end
 
   def cache_lock_key
