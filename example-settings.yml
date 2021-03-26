@@ -13,7 +13,7 @@ slacks:
     secret: 0123456789abcdefghijklmnopqrstuv
     access_token: 0123456789abcdefghijklmnopqrstuv
     channels:
-      - pattern: teamname-*
+      - pattern: teamname-.*
         dictionary: 1
 api_keys:
   - name: Example User
