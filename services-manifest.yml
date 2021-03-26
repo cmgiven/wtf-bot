@@ -1,5 +1,5 @@
 ---
 create-services:
 - name: ((prefix))wtfbot-redis
-  broker: redis32
-  plan: standard-ha
+  broker: aws-elasticache-redis
+  plan: redis-dev

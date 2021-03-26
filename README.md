@@ -30,9 +30,9 @@ A Slackbot for looking up acronyms by typing `/wtf`.
 1. Configure the application prefix by copying `example-vars.yml` to `vars.yml` and editing
 2. [Set up the Cloud Foundry CLI and log in to Cloud.gov](https://cloud.gov/docs/getting-started/setup/#set-up-the-command-line)
 3. Install the Create-Service-Push plugin: `cf install-plugin Create-Service-Push`
-4. Push the app to Cloud.gov: `cf csp`
+4. Push the app to Cloud.gov: `cf csp --vars-file vars.yml --push-as-subprocess`
 
-There is an issue that prevents the `DATABASE_URL` environment variable from being automatically derived from the `VCAP_SERVICES` variable. Manually set `DATABASE_URL` to point to the redis service (`cf set-env [app name] DATABASE_URL [redis_uri]`) and restart the app (`cf rs [app name]`).
+There is an issue that prevents the `DATABASE_URL` environment variable from being automatically derived from the `VCAP_SERVICES` variable. Find the URI by running `cf env [app name]` and inspecting `VCAP_SERVICES`, but replace "redis://" with "rediss://" or else the connection will fail. Manually set `DATABASE_URL` to use that URI (`cf set-env [app name] DATABASE_URL [redis_uri]`) and restart the app (`cf rs [app name]`).
 
 ## Configure
 
