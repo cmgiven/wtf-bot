@@ -4,15 +4,14 @@ require 'base64'
 require 'json'
 require 'csv'
 
+require_relative 'errors'
+
 $redis = Redis.new(
   :url => ENV['DATABASE_URL'],
   :reconnect_attempts => 3,
   :reconnect_delay => 1.0,
   :reconnect_delay_max => 2.0,
 )
-
-class DictionaryNotLoadedError < StandardError; end
-class CouldNotObtainLock < StandardError; end
 
 class Dictionary
   PATH = 'acronyms.csv'.freeze
@@ -30,7 +29,7 @@ class Dictionary
   end
   LUA
 
-  attr_reader :name, :repo, :webhook_secret
+  attr_reader :name, :repo, :default_branch, :webhook_secret
 
   def initialize(name, repo, access_token, webhook_secret, default_branch)
     @name = name
@@ -112,7 +111,7 @@ class Dictionary
     with_lock do
       retrieve_from_github
     end
-  rescue CouldNotObtainLock
+  rescue CouldNotObtainDatabaseLock
     false
   end
 
@@ -151,7 +150,7 @@ class Dictionary
       result = yield
       release_lock if lock
       result
-    rescue CouldNotObtainLock
+    rescue CouldNotObtainDatabaseLock
       raise if (lock_tries += 1) > retries
       sleep [RETRY_DELAY * 2**(lock_tries - 1), RETRY_DELAY_MAX].min
       retry
@@ -163,7 +162,7 @@ class Dictionary
     @lock = get_unique_lock_id
     $redis.call([:set, cache_lock_key, @lock, :nx, :px, LOCK_TTL])
   rescue
-    raise CouldNotObtainLock
+    raise CouldNotObtainDatabaseLock
   end
 
   def release_lock

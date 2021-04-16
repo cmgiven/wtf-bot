@@ -99,3 +99,9 @@ Find the definition(s) of an acronym.
 Open a pull request with a new definition of an acronym.
 
 `curl -X POST -H "Authorization: Token [token]" --data-urlencode "definition=[definition]" localhost:5000/text/[dictionary]/[acronym]`
+
+### GET /text/refresh
+
+Manually refresh all of the dictionary caches.
+
+`curl -H "Authorization: Token [token]" localhost:5000/text/refresh`

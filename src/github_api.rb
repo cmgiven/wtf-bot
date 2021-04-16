@@ -9,7 +9,7 @@ class GithubApi < Base
   end
 
   post '/webhook/?' do
-    dictionary.refresh! if ['refs/heads/main', 'refs/heads/master'].include?(event['ref'])
+    dictionary.refresh! if event['ref'] == "refs/heads/#{dictionary.default_branch}"
   end
 
   def dictionary

@@ -1,6 +1,15 @@
 require_relative 'base'
+require_relative 'errors'
 
 class TextApi < Base
+  get '/refresh/?' do
+    require_api_key
+    settings.dictionaries.each(&:refresh!)
+    200
+  rescue CouldNotObtainDatabaseLock
+    error 503
+  end
+
   namespace '/:dictionary/:acronym/?' do
     get do
       entries = dictionary.lookup(acronym)
