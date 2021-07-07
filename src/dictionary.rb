@@ -117,7 +117,7 @@ class Dictionary
 
   def retrieve_from_github
     file = github.contents(@repo, :path => PATH)
-    csv = Base64.decode64(file.content)
+    csv = Base64.decode64(file.content).force_encoding(Encoding::UTF_8)
     without_headers = csv.split("\n")[1..-1].join("\n")
     rows = CSV.parse(without_headers, headers: HEADERS)
 
