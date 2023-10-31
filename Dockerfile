@@ -9,8 +9,16 @@ COPY \
   Gemfile.lock \
   /app
 
-COPY src/ /app/src/
-
 RUN bundle install
 
-CMD RUBYOPT=-W:no-deprecated bundle exec rackup config.ru -o 0.0.0.0 -p 5000
+COPY \
+  config.ru \
+  start.sh \
+  /app
+
+COPY src/ /app/src/
+
+CMD RUBYOPT=-W:no-deprecated \
+  bundle exec rackup config.ru \
+    -o ${HOST} \
+    -p ${PORT}

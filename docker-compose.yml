@@ -10,6 +10,8 @@ services:
       - ./settings.yml:/app/settings.yml
     environment:
       - DATABASE_URL=redis://redis:6379
+      - HOST=0.0.0.0
+      - PORT=5000
     ports:
       - 5000:5000
       - 8000:8000
