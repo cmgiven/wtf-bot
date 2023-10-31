@@ -1,0 +1,17 @@
+
+services:
+  redis:
+    image: redis:7-alpine
+
+  app:
+    build:
+      context: .
+    volumes:
+      - ./settings.yml:/app/settings.yml
+    environment:
+      - DATABASE_URL=redis://redis:6379
+      - HTTP_PROXY=
+      - HTTPS_PROXY=
+    ports:
+      - 5000:5000
+      - 8000:8000
