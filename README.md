@@ -12,27 +12,25 @@ A Slackbot for looking up acronyms by typing `/wtf`.
 * Search across multiple acronym dictionaries at once
 * Support multiple Slacks from a single instance
 * Text API for command line use
-* Deploy to [Cloud.gov](https://cloud.gov)
 
 ## Develop
 
-### macOS
+It's recommended to use the Linux machine at connect.omb.gov for development, but any machine with [Docker](https://docs.docker.com/engine/install/) installed should work.
 
-1. Install rbenv and Redis: `brew install rbenv redis`
-2. Build Ruby: `rbenv install`
-3. Install gems: `bundle install`
-4. Start development server: `foreman start`
-5. (optional) Install ngrok: `brew cask install ngrok`
-6. (optional) Expose development server to a public url: `ngrok http 5000`
+_If this is your first time setting up the server, read through [Configure](./#configure) first!_
+
+Run `docker-compose up`. The server should startup at port 5000; you can test with the following command:
+
+```
+$ curl --noproxy "*" 0.0.0.0:5000/status
+OK
+```
+
+_Note: `--noproxy "*"` is required for connect.omb.gov; it may not be needed on other machines._
 
 ## Deploy
 
-1. Configure the application prefix by copying `example-vars.yml` to `vars.yml` and editing
-2. [Set up the Cloud Foundry CLI and log in to Cloud.gov](https://cloud.gov/docs/getting-started/setup/#set-up-the-command-line)
-3. Install the Create-Service-Push plugin: `cf install-plugin Create-Service-Push`
-4. Push the app to Cloud.gov: `cf csp --vars-file vars.yml --push-as-subprocess`
-
-There is an issue that prevents the `DATABASE_URL` environment variable from being automatically derived from the `VCAP_SERVICES` variable. Find the URI by running `cf env [app name]` and inspecting `VCAP_SERVICES`, but replace "redis://" with "rediss://" or else the connection will fail. Manually set `DATABASE_URL` to use that URI (`cf set-env [app name] DATABASE_URL [redis_uri]`) and restart the app (`cf rs [app name]`).
+TODO
 
 ## Configure
 
