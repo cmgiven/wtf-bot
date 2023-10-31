@@ -11,11 +11,7 @@ COPY \
 
 RUN bundle install
 
-COPY \
-  config.ru \
-  start.sh \
-  /app
-
+COPY config.ru /app
 COPY src/ /app/src/
 
 CMD RUBYOPT=-W:no-deprecated \
