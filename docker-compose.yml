@@ -11,6 +11,7 @@ services:
       - DATABASE_URL=redis://redis:6379
       - HOST=0.0.0.0
       - PORT=5000
+    env_file: ./settings.env
     ports:
       - 5000:5000
       - 8000:8000
