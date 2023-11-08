@@ -34,7 +34,7 @@ TODO
 
 ## Configure
 
-We configure wtf-bot using a JSON environment variable `WTF_BOT_SETTINGS` or a text file with the name `settings.yml`. Check out `example-settings.yml` for a starting point. We'll explore each of the configuration options in the sections below.
+We configure wtf-bot using a JSON environment variable `WTF_BOT_SETTINGS` or a text file with the name `settings.yml`. Check out `example-settings.yml` or `example-settings.env` for a starting point. We'll explore each of the configuration options in the sections below.
 
 ### GitHub
 
