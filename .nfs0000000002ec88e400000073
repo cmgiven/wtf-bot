@@ -15,7 +15,7 @@ A Slackbot for looking up acronyms by typing `/wtf`.
 
 ## Develop
 
-It's recommended to use the Linux machine at OMB Connect for development, but any machine with [Docker](https://docs.docker.com/engine/install/) installed should work.
+It's recommended to use the Linux machine at connect.omb.gov for development, but any machine with [Docker](https://docs.docker.com/engine/install/) installed should work.
 
 _If this is your first time setting up the server, read through [Configure](./#configure) first!_
 
