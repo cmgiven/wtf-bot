@@ -1,7 +1,0 @@
----
-applications:
-- name: ((prefix))wtfbot
-  buildpacks:
-  - https://github.com/cloudfoundry/ruby-buildpack.git
-  services:
-  - ((prefix))wtfbot-redis

@@ -1,2 +1,4 @@
+*.swp
+
 settings.yml
-vars.yml
+settings.env
